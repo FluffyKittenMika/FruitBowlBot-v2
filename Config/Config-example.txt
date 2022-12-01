@@ -1,0 +1,12 @@
+﻿#Twitch settings
+
+twitchchannels=
+
+accesstoken=
+refreshtoken=
+clientid=
+
+#misc settings
+
+
+#hah, what if we kissed and made the stream all steamy uwu
