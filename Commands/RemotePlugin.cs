@@ -34,7 +34,7 @@ namespace FruitBowlBot_v2.Commands
         public string CAction(Message message)
         {
 
-            if (message.IsModerator && message.Username.ToLower() == "fluffykittenmika" || message.Username.ToLower()== "misternotalk")
+            if (message.IsModerator)
             {
 
                 string m = "";
@@ -105,11 +105,6 @@ namespace FruitBowlBot_v2.Commands
 
         static Random random = new();
         static int mouseSpeed = 15;
-
-        public void Main(string[] args)
-        {
-            //MoveMouse(0, 0, 0, 0);
-        }
 
         public void MoveMouse(int x, int y, int rx, int ry)
         {

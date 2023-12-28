@@ -2,11 +2,14 @@
 
 twitchchannels=
 
+
+username=
 accesstoken=
 refreshtoken=
 clientid=
 
 #misc settings
-
+logging=true
+annoyotron=false
 
 #hah, what if we kissed and made the stream all steamy uwu

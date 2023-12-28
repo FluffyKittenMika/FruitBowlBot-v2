@@ -68,7 +68,7 @@ namespace FruitBowlBot_v2.ConnectionSystems
                             {
                                 string[] split = line.Split('='); //Split the non comment lines at the equal signs
                                 settings.Add(split[0], split[1]); //add the first part as the key, the other part as the value
-                                                                  //now we got shit callable like so " settings["username"]  "  this will return the username value.
+                                                                  //now we got stuff callable like so " settings["username"]  "  this will return the username value.
                             }
                         }
                         catch (Exception e)
@@ -80,7 +80,7 @@ namespace FruitBowlBot_v2.ConnectionSystems
                     }
                 }
 
-                Console.WriteLine("Detected settings for theese keys");
+                Console.WriteLine("Detected settings for these keys");
                 foreach (var item in settings.Keys)
                     Console.WriteLine(item);
 
