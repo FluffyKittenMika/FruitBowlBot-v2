@@ -78,7 +78,7 @@ namespace FruitBowlBot_v2.Commands
         public static string[] Sanitize(string[] input)
         {
             var str = string.Join(" ", input).Trim();
-            Regex rgx = new("[^a-zA-Z0-9 -]");
+            Regex rgx = new("[^a-zA-Z0-9 -/_/g]");
             str = rgx.Replace(str, "");
             return str.Split(' ');
         }

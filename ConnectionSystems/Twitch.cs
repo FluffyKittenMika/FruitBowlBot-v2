@@ -265,8 +265,7 @@ namespace FruitBowlBot_v2.ConnectionSystems
 
         private void Client_OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
-            //client.SendMessage(e.Channel, "Hey jschip!");
-                Console.WriteLine($"Connected to {settings["channel"]}");
+            Console.WriteLine($"Connected to {settings["channel"]}");
         }
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
@@ -280,7 +279,7 @@ namespace FruitBowlBot_v2.ConnectionSystems
             if (settings["annoyotron"] == "true")
             {
 
-
+                //TODO: buggy, 2x execute
                 new Thread(delegate ()
                 {
                     Application.EnableVisualStyles();
@@ -289,16 +288,36 @@ namespace FruitBowlBot_v2.ConnectionSystems
                     Application.Run(a);
                 }).Start();
 
-
                 // MessageBox.Show(e.ChatMessage.Message, $"{e.ChatMessage.Username} says:");
             }
 
+            if (settings["speakchat"] == "true")
+            {
+                var sayit = _plugins.Where(plug => plug.PluginName == "say").FirstOrDefault();
+                var reaction = "";
+                try
+                {
+                    Message msg = new()
+                    {
+                        Arguments = e.ChatMessage.Message.Split(' ').ToList(),
+                        Command = e.ChatMessage.Message,
+                        Channel = e.ChatMessage.Channel,
+                        IsModerator = (e.ChatMessage.IsBroadcaster || e.ChatMessage.IsModerator), // fixes some issues
+                        RawMessage = e.ChatMessage.Message,
+                        Username = e.ChatMessage.Username
+                    };
+                    reaction = sayit.Action(msg).Result;
+                }
+                catch (Exception errr)
+                {
+                    Console.WriteLine(errr.Message + " ---- " + errr.StackTrace);
+                }
+
+            }
 
 
-
-
-            if (e.ChatMessage.Message.Contains("bagle"))
-                client.TimeoutUser(e.ChatMessage.Channel, e.ChatMessage.Username, TimeSpan.FromSeconds(1), "Bad word! 1sec timeout!");
+            //    if (e.ChatMessage.Message.Contains("bagle"))
+            //    client.TimeoutUser(e.ChatMessage.Channel, e.ChatMessage.Username, TimeSpan.FromSeconds(1), "Bad word! 1sec timeout!");
 
             if (e.ChatMessage.Message.Contains("!quote"))
             {

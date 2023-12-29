@@ -11,5 +11,6 @@ clientid=
 #misc settings
 logging=true
 annoyotron=false
+speakchat=false
 
 #hah, what if we kissed and made the stream all steamy uwu
