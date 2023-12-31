@@ -16,7 +16,10 @@ namespace FruitBowlBot_v2.Commands
         public string Command => "say";
         public IEnumerable<string> Help => new[] { "!say what to say" };
         public IEnumerable<string> Aliases => new string[0];
+
+        public bool ModOnly { get; set; } = true;
         public bool Loaded { get; set; } = true;
+
         SoundPlayer player = new();
         Random r = new();
 

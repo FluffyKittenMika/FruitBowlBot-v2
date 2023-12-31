@@ -18,6 +18,9 @@ namespace FruitBowlBot_v2.Commands
         public bool Loaded { get; set; } = true;
 
 
+        public bool ModOnly { get; set; } = true;
+
+
         private readonly string memoryPath = "./customCommands.txt";
 
         public CustomCommandsPluginCommand()

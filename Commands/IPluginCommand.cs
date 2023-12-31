@@ -11,6 +11,11 @@ namespace FruitBowlBot_v2.Commands
         string Command { get; }
         IEnumerable<string> Aliases { get; }
         bool Loaded { get; set; }
+
+        bool ModOnly { get; set; }
+
+
+
         IEnumerable<string> Help { get; }
         Task<string> Action(Message message);
     }

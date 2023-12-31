@@ -19,7 +19,7 @@ namespace FruitBowlBot_v2.ConnectionSystems
     class Program
 
     {
-        static void Main(string[] args)
+        static void Main()
         {
             while (true)
             {
@@ -167,6 +167,14 @@ namespace FruitBowlBot_v2.ConnectionSystems
             client.OnChatCommandReceived += Client_OnChatCommandReceived;
 
             client.Connect();
+
+            new Thread(delegate ()
+            {
+                Application.EnableVisualStyles();
+
+                Forms.Manager a = new();
+                Application.Run(a);
+            }).Start();
         }
 
         private void Client_OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
@@ -190,9 +198,22 @@ namespace FruitBowlBot_v2.ConnectionSystems
 
             foreach (var plug in enabledPlugins)
             {
+
+                //todo: i'm too high to uh, check if mod on mod things, do it then else skip? fuck
+                if (plug.ModOnly && msg.IsModerator)
+                {
+                    //true true, go ahead is mod approved
+
+                }
+                else if (!plug.ModOnly)
+                {
+                    //if not mod only, go ahead anyways
+                }
+
                 if (plug.Command == command || plug.Aliases.Contains(command))
                 {
                     string reaction = "";
+
                     try
                     {
                         reaction = plug.Action(msg).Result;
@@ -202,9 +223,11 @@ namespace FruitBowlBot_v2.ConnectionSystems
                         Console.WriteLine(errr.Message + " ---- " + errr.StackTrace);
                     }
 
+
                     if (reaction != null)
                         chatClient.SendMessage(e.Command.ChatMessage.Channel, reaction);
                     break;
+
                 }//do nothing if no match
             }
         }

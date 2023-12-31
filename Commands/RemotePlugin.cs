@@ -18,6 +18,7 @@ namespace FruitBowlBot_v2.Commands
         public IEnumerable<string> Help => new[] { "!remote uuuh it remotes" };
         public IEnumerable<string> Aliases => new string[0];
         public bool Loaded { get; set; } = true;
+        public bool ModOnly { get; set; } = true;
 
         public MouseMove mouse = new();
         public Random random = new();
