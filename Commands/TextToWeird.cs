@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
-using System.Media;
+﻿using LibVLCSharp.Shared;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using LibVLCSharp.Shared;
-using System.Threading;
+using System.Media;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FruitBowlBot_v2.Commands
 {
@@ -26,6 +26,8 @@ namespace FruitBowlBot_v2.Commands
 
         public Dictionary<string, List<string>> SoundFilePaths;
         public Dictionary<string, List<string>> SpacedSoundFilePaths;
+        public static Dictionary<string, int> MissingWords;
+
         public class Sound
         {
             public Sound(string text, bool found, string? filepath, Range range)
@@ -80,7 +82,7 @@ namespace FruitBowlBot_v2.Commands
 
         public static string[] Sanitize(string[] input)
         {
-            var str = string.Join(" ", input).Trim();
+            var str = string.Join(" ", input).Trim().Replace("\'", "").Replace(","," ").Replace(".",""); //TODO use regex later, this is temp test
             Regex rgx = new("[^a-zA-Z0-9 -/_/g]");
             str = rgx.Replace(str, "");
             return str.Split(' ');
@@ -98,6 +100,7 @@ namespace FruitBowlBot_v2.Commands
 
         public List<Sound> GetSounds(string[] input, Random rnd)
         {
+            
             var result = new List<Sound>();
             string sentence = string.Join(" ", input).ToLower();
             int currentIndex = 0;
@@ -151,11 +154,11 @@ namespace FruitBowlBot_v2.Commands
         public TextToWeird()
         {
             Core.Initialize();
-            
+
             LoadSoundFilePaths(Path.Combine(Environment.CurrentDirectory, "Sounds"), new[] { ".wav", ".ogg", ".mp3", ".mid" });
             File.WriteAllLines("wordlist.txt", SpacedSoundFilePaths.Select(x => x.Key));
             File.AppendAllLines("wordlist.txt", SoundFilePaths.Select(x => x.Key));
-
+            MissingWords = new Dictionary<string, int>();
 
         }
 
@@ -164,7 +167,8 @@ namespace FruitBowlBot_v2.Commands
 
             foreach (var s in GetSounds(Sanitize(message.Arguments.ToArray()), r))
             {
-                if (s.Found) { 
+                if (s.Found)
+                {
                     playlist.Enqueue(s.Filepath);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"[{s.Range}]{s.Text}: {Path.GetFileName(s.Filepath)}");
@@ -173,6 +177,19 @@ namespace FruitBowlBot_v2.Commands
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{s.Range}]{s.Text}: {Path.GetFileName(s.Filepath)}");
+
+                    try
+                    {
+                        if (MissingWords.ContainsKey(s.Text))
+                            MissingWords[s.Text]++;
+                        else
+                            MissingWords.Add(s.Text, 1);
+                    }
+                    catch (Exception a)
+                    {
+                        Console.WriteLine(a.ToString());
+                    }
+                    
                 }
 
                 Console.ForegroundColor = ConsoleColor.White;
